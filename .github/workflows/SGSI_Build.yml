@@ -71,12 +71,17 @@ jobs:
           fi
           ls "upload"
 
+      - name: Create tag
+        uses: actions/checkout@v2
+        with:
+          ref: 'refs/tags/v1.0'
+          fetch-depth: 0
       - name: Upload SGSI to GH-Release
         uses: softprops/action-gh-release@v1
         with:
           artifacts: ${{ github.workspace }}/SGSI-build-tool/upload/*
           name: "${{ steps.config.outputs.os_type }}${{ steps.config.outputs.build_type }}-Android${{ steps.config.outputs.version }}-unpack"
-          tag: "${{ steps.config.outputs.os_type }}${{ steps.config.outputs.build_type }}-${{ steps.config.outputs.version }}-${{ github.run_number }}"
+          tag_name: ${{ github.ref }}
           bodyFile: "${{ github.workspace}}/SGSI-build-tool/SGSI/build_info.txt"
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
